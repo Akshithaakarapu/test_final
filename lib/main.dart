@@ -126,12 +126,30 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(height: 15,),
               Container(
-                              height: 50,
+                              height: 70,
                               width: 300,
                               child: TextField(
                                         //obscureText: true,
                                         decoration: InputDecoration(
-                                         prefixIcon: Icon(Icons.search,color: Color(0xffffffff  ),),
+                                         suffixIcon: Padding(
+                                           padding: const EdgeInsets.all(8.0),
+                                           child: Container(
+                          height: 40,
+                          width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blueAccent,
+                              boxShadow: [BoxShadow(color: Color.fromARGB(255, 251, 250, 250)),],
+                              border: Border.all(width: 0,
+                              //color: Color.fromARGB(255, 9, 9, 9)
+                              )),
+                              child: ClipRRect(
+                borderRadius: BorderRadius.circular(40.0),
+                child:Icon(Icons.search,color: Colors.white,),
+              ),
+            ),
+                                         ),
+                                          
                                           border: OutlineInputBorder( 
                                             borderRadius: BorderRadius.circular(30),
                                           ),
@@ -168,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     })
                 ), list==null? CircularProgressIndicator():      
                              Container(
-                      height: 490,
+                      height: 470,
                       child: GridView.builder(
                 itemCount: list!.categoryProducts!.length,
                 shrinkWrap: true,           
