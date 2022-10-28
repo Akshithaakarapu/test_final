@@ -160,15 +160,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      //return List_and_grid(
-                   // names: '${list!.data![index].categoryName}', 
-                    //  );
-                      return Text("${list!.data![index].categoryName}");
+                      return List_and_grid(
+                    names: '${list!.data![index].categoryName}', 
+                     );
+                     // return Text("${list!.data![index].categoryName}");
                        
                     })
                 ), list==null? CircularProgressIndicator():      
                              Container(
-                      height: 540,
+                      height: 490,
                       child: GridView.builder(
                 itemCount: list!.categoryProducts!.length,
                 shrinkWrap: true,           

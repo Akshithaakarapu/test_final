@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:test_final/main.dart';
 
 class Add_page extends StatefulWidget {
   const Add_page({ Key? key }) : super(key: key);
@@ -8,6 +11,63 @@ class Add_page extends StatefulWidget {
 }
 
 class _Add_pageState extends State<Add_page> {
+  XFile? insidePic;
+  String networkImage = "";
+  final picker = ImagePicker();
+  Future getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    //File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+     setState(() {
+      if (pickedFile != null) {
+        insidePic = pickedFile;
+        networkImage = "";
+      } else {
+        print('No image selected');
+      }
+    });
+  }
+
+  final productController= TextEditingController();
+  final descriptionController=TextEditingController();
+  bool _loading=false;
+
+  void performLogin() async{
+
+  String product=productController.text.trim();
+  String description=descriptionController.text.trim();
+
+  FormData formData=FormData.fromMap({
+
+  "product_name":product,
+  "description":description,
+  "image": MultipartFile.fromBytes(
+        await insidePic!.readAsBytes(),
+        filename: insidePic?.name,
+      ),
+
+   });
+
+  setState(() {
+    
+  });
+  Response response=await Dio().post("http://jayanthi10.pythonanywhere.com/api/v1/category/",data: formData);
+
+  
+  if(response.statusCode==200){
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) { 
+      return MyHomePage();}));
+
+       setState(() {
+    _loading=true;
+  });
+  }
+
+
+  else{
+    print("wrong credentioal");
+  }
+
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +82,9 @@ class _Add_pageState extends State<Add_page> {
                 child: Column(
                         children: [
                           TextField(
-                          //controller: productController,
+                          controller: productController,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.mail,color: Color(0xffFC7508),),
+                          prefixIcon: Icon(Icons.mail,color: Color.fromARGB(255, 10, 10, 10),),
                           labelText: 'PRODUCT',
                           border: OutlineInputBorder( 
                             borderRadius: BorderRadius.circular(10)
@@ -35,11 +95,11 @@ class _Add_pageState extends State<Add_page> {
                       ),
                       SizedBox(height: 25,),
                       TextField(
-                        //controller: descriptionController,
+                        controller: descriptionController,
                         //obscureText: true,
                         decoration: InputDecoration(
                           
-                          prefixIcon: Icon(Icons.person,color: Color(0xffFC7508),),
+                          prefixIcon: Icon(Icons.person,color: Color.fromARGB(255, 15, 15, 15),),
                           labelText: 'DESCRIPTION',
                           border: OutlineInputBorder( 
                             borderRadius: BorderRadius.circular(10)
@@ -48,23 +108,11 @@ class _Add_pageState extends State<Add_page> {
                           
                         ),
                       ),
-                      // Container(
-                      //   child: image==null?Center(child: Text('Pick image'),),
-                      // ),
-                      // Container(
-                      //   child: Center(child: Image.file(
-                      //     File(image!.Path).absolute,
-                      //     height: 100,
-                      //     width: 100,
-                      //     fit: BoxFit.cover,
-                      //     )),
-                      // ),
                       
-      
                     SizedBox(height: 10,),
       
                       ElevatedButton(onPressed: (() {
-                        // getImage();
+                         getImage();
                          
                      
                    }), 
@@ -73,7 +121,7 @@ class _Add_pageState extends State<Add_page> {
       
                    ElevatedButton(onPressed: (() {
                        
-                  //performLogin();
+                  performLogin();
                    
                    }), 
                    child: Text('Upload'))
